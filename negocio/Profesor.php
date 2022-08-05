@@ -18,8 +18,8 @@ class Profesor extends Usuario
     private $contrasena;
 
     /**
-     * Método para obtener la contraseña del Administrador
-     * @return [Integer] contraseña del Administrador
+     * Método para obtener la contraseña del Profesor
+     * @return [Integer] contraseña del Profesor
      */
     public function getContrasena()
     {
@@ -28,8 +28,8 @@ class Profesor extends Usuario
 
 
     /**
-     * Método para cambiar la contraseña del Administrador
-     * @param [Integer] contraseña del Administrador
+     * Método para cambiar la contraseña del Profesor
+     * @param [Integer] contraseña del Profesor
      */
     public function setContrasena($contrasena)
     {
