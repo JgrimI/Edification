@@ -52,6 +52,24 @@ class SalonDAO implements DAO
 	 */
 	public function consultar($codigo)
 	{
+		$sentencia = "SELECT id_estudiante FROM rel_estudiante_salon WHERE estado = 'A' AND id_salon = ? ;";
+		$stmt = $this->conexion->prepare($sentencia);
+		if (false === $stmt) {
+			die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+		}
+		$stmt->bind_param("i", $codigo);
+		$stmt->execute();
+
+		$stmt->bind_result($id_estudante);
+
+		$estudiantes = [];
+
+		while ($stmt->fetch()) {
+			$estudiantes[] = $id_estudante;
+		}
+
+		$stmt->close();
+
 		$sentencia = "SELECT * FROM salon WHERE id_salon = ? ;";
 		$stmt = $this->conexion->prepare($sentencia);
 		if (false === $stmt) {
@@ -73,6 +91,7 @@ class SalonDAO implements DAO
 			$salon->setFechaCreacion($fecha_creacion);
 			$salon->setFechaActualizacion($fecha_actualizacion);
 			$salon->setEstado($estado);
+			$salon->setEstudiantes($estudiantes);
 		}
 		$stmt->close();
 		return $salon;
@@ -100,11 +119,35 @@ class SalonDAO implements DAO
 		$estado = $salonNuevo->getEstado();
 		$dateC = $salonNuevo->getFechaCreacion();
 		$dateA = $salonNuevo->getFechaActualizacion();
+		$estudiantes = $salonNuevo->getEstudiantes();
+
 		$stmt->bind_param("isssss", $id_profesor, $nombre, $descripcion, $dateC, $dateA, $estado);
 
 		$stmt->execute();
+
+		$id_salon = $stmt->insert_id;
+
+
 		// if ($stmt->affected_rows === 0) exit('No rows updated');
 		$stmt->close();
+		if ($estudiantes != null) {
+			foreach ($estudiantes as $est) {
+
+				$sentencia = "INSERT INTO `rel_estudiante_salon` (`id_estudiante`, `id_salon`, `fecha_creacion`, `fecha_actualizacion`, `estado`) VALUES (?,?,?,?,?) ;";
+
+				$stmt = $this->conexion->prepare($sentencia);
+
+				if (false === $stmt) {
+					die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+				}
+
+				$stmt->bind_param("iisss", $est, $id_salon, $dateC, $dateC, $estado);
+
+				$stmt->execute();
+
+				$stmt->close();
+			}
+		}
 	}
 
 	/**
@@ -112,11 +155,99 @@ class SalonDAO implements DAO
 	 * @param  salon $salon salon ingresado por parámetro
 	 * @return void
 	 */
-	public function modificar($salon, $contrasena = false)
+	public function modificar($salon)
 	{
 
 		$date = date('Y-m-d H:i:s');
+		$id_salon = $salon->getId();
+		if ($salon->getEstudiantes() != '') {
+			$arr = explode('#', $salon->getEstudiantes());
 
+			$estudiantesAdd = explode(',', $arr[0]);
+			$estudiantesDel = explode(',', $arr[1]);
+			$sentencia = "SELECT id_estudiante FROM  `rel_estudiante_salon` WHERE id_salon = ?;";
+			$stmt = $this->conexion->prepare($sentencia);
+			if (false === $stmt) {
+				die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+			}
+			$stmt->bind_param("i",  $id_salon);
+
+			$stmt->execute();
+			$est = [];
+			$stmt->bind_result($idest);
+
+			/* fetch values */
+			while ($stmt->fetch()) {
+				$est[] = $idest;
+			}
+			$stmt->close();
+
+			if (!empty($est)) {
+				$estado = 'A';
+				foreach ($estudiantesAdd as $key) {
+					if (in_array($key, $est)) {
+						$sentencia = " UPDATE `rel_estudiante_salon` SET `estado`=?, `fecha_actualizacion` =? WHERE `id_estudiante` = ? AND `id_salon`=?;";
+
+						$stmt = $this->conexion->prepare($sentencia);
+						if (false === $stmt) {
+							die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+						}
+
+						$stmt->bind_param("ssii", $estado, $date, $key, $id_salon);
+
+						$stmt->execute();
+						// if ($stmt->affected_rows === 0) exit('No rows updated');
+						$stmt->close();
+					} else {
+						$sentencia = "INSERT INTO `rel_estudiante_salon` (`id_estudiante`, `id_salon`, `fecha_creacion`, `fecha_actualizacion`, `estado`) VALUES (?,?,?,?,?) ;";
+
+						$stmt = $this->conexion->prepare($sentencia);
+
+						if (false === $stmt) {
+							die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+						}
+
+						$stmt->bind_param("iisss", $key, $id_salon, $date, $date, $estado);
+
+						$stmt->execute();
+
+						$stmt->close();
+					}
+				}
+				$estado = 'I';
+				foreach ($estudiantesDel as $key) {
+					if (in_array($key, $est)) {
+						$sentencia = " UPDATE `rel_estudiante_salon` SET `estado`=?, `fecha_actualizacion`=? WHERE `id_estudiante` = ? AND `id_salon`=?;";
+
+						$stmt = $this->conexion->prepare($sentencia);
+						if (false === $stmt) {
+							die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+						}
+
+						$stmt->bind_param("ssii", $estado, $date, $key, $id_salon);
+
+						$stmt->execute();
+						// if ($stmt->affected_rows === 0) exit('No rows updated');
+						$stmt->close();
+					}
+				}
+			} {
+				foreach ($estudiantesAdd as $key) {
+					$sentencia = " UPDATE `rel_estudiante_salon` SET `estado`=?, `fecha_actualizacion` =? WHERE `id_estudiante` = ? AND `id_salon`=?;";
+
+					$stmt = $this->conexion->prepare($sentencia);
+					if (false === $stmt) {
+						die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+					}
+
+					$stmt->bind_param("ssii", $estado, $date, $key, $id_salon);
+
+					$stmt->execute();
+					// if ($stmt->affected_rows === 0) exit('No rows updated');
+					$stmt->close();
+				}
+			}
+		}
 		$sentencia = " UPDATE `salon` SET `nombre_salon`=?,`id_profesor`=?, `descripcion_salon`=?, `fecha_actualizacion_salon`=?, `estado_salon`=? WHERE `id_salon`=?;";
 
 		$stmt = $this->conexion->prepare($sentencia);
@@ -127,8 +258,7 @@ class SalonDAO implements DAO
 		$id_profesor = $salon->getIdProfesor();
 		$descripcion = $salon->getDescripcion();
 		$estado = $salon->getEstado();
-		$id = $salon->getId();
-		$stmt->bind_param("sisssi", $nombre, $id_profesor, $descripcion, $date, $estado, $id);
+		$stmt->bind_param("sisssi", $nombre, $id_profesor, $descripcion, $date, $estado, $id_salon);
 
 		$stmt->execute();
 		// if ($stmt->affected_rows === 0) exit('No rows updated');
@@ -165,6 +295,27 @@ class SalonDAO implements DAO
 			array_push($salones, $salon);
 		}
 		$stmt->close();
+		foreach ($salones as &$salon) {
+			$codigo = $salon->getId();
+			$sentencia = "SELECT id_estudiante FROM rel_estudiante_salon WHERE estado = 'A' AND id_salon = ? ;";
+			$stmt = $this->conexion->prepare($sentencia);
+			if (false === $stmt) {
+				die('prepare() failed: ' . htmlspecialchars($this->conexion->error));
+			}
+			$stmt->bind_param("i", $codigo);
+			$stmt->execute();
+
+			$stmt->bind_result($id_estudante);
+
+			$estudiantes = [];
+
+			while ($stmt->fetch()) {
+				$estudiantes[] = $id_estudante;
+			}
+			$salon->setEstudiantes($estudiantes);
+			$stmt->close();
+		}
+
 
 		return $salones;
 	}

@@ -46,6 +46,10 @@ class Salon
     Representa el estado del Salon: activo/inactivo
     */
     private $estado;
+    /*
+    Representa los estudiantes del Salon
+    */
+    private $estudiantes;
 
 
     /**
@@ -120,7 +124,7 @@ class Salon
 
     /**
      * Método para obtener la fecha de creacion del Salon
-     * @return [Date] fecha de creacion del Salon
+     * @return [string] fecha de creacion del Salon
      */
     public function getFechaCreacion()
     {
@@ -129,7 +133,7 @@ class Salon
 
     /**
      * Método para asignar la fecha de creacion del Salon
-     * @param [Date] fecha de creacion del Salon
+     * @param [string] fecha de creacion del Salon
      */
     public function setFechaCreacion($fechaCreacion)
     {
@@ -138,7 +142,7 @@ class Salon
 
     /**
      * Método para obtener la fecha de creacion del Salon
-     * @return [Date] fecha de creacion del Salon
+     * @return [string] fecha de creacion del Salon
      */
     public function getFechaActualizacion()
     {
@@ -147,7 +151,7 @@ class Salon
 
     /**
      * Método para asignar la fecha de actualización del Salon
-     * @param [Date] fecha de actualización del Salon
+     * @param [string] fecha de actualización del Salon
      */
     public function setFechaActualizacion($fechaActualizacion)
     {
@@ -157,7 +161,7 @@ class Salon
 
     /**
      * Método para obtener el estado del Salon (1:Activo/0:Inactivo)
-     * @return [integer] estado del Salon
+     * @return [string] estado del Salon
      */
     public function getEstado()
     {
@@ -166,10 +170,26 @@ class Salon
 
     /**
      * Método para cambiar el estado del Salon 
-     * @param [integer] estado del Salon
+     * @param [string] estado del Salon
      */
     public function setEstado($estado)
     {
         $this->estado = $estado;
+    }
+    /**
+     * Método para obtener los estudiantes del Salon 
+     * @return [string] estudiantes del Salon
+     */
+    public function getEstudiantes()
+    {
+        return $this->estudiantes;
+    }
+    /**
+     * Método para cambiar los estudiantes del Salon 
+     * @param [string] estudiantes del Salon
+     */
+    public function setEstudiantes($estudiantes)
+    {
+        $this->estudiantes = $estudiantes;
     }
 }
