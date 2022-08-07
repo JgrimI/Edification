@@ -15,15 +15,15 @@ try {
     ManejoEstudiante::setConexionBD($conexion);
     $date = date('Y-m-d H:i:s');
 
-    $profesor = new Estudiante();
-    $profesor->setNombre($nombre);
-    $profesor->setApellido($apellido);
-    $profesor->setEmail($correo);
-    $profesor->setEstado('A');
-    $profesor->setFechaCreacion($date);
-    $profesor->setFechaActualizacion($date);
+    $estudiante = new Estudiante();
+    $estudiante->setNombre($nombre);
+    $estudiante->setApellido($apellido);
+    $estudiante->setEmail($correo);
+    $estudiante->setEstado('A');
+    $estudiante->setFechaCreacion($date);
+    $estudiante->setFechaActualizacion($date);
 
-    ManejoEstudiante::crearEstudiante($profesor);
+    ManejoEstudiante::crearEstudiante($estudiante);
     $json = array(
         "response" => 1
     );

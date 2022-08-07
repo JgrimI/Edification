@@ -53,7 +53,8 @@ class ManejoEstudiante
     public static function crearEstudiante($estudiante)
     {
         $estudianteDAO = EstudianteDAO::obtenerestudianteDAO(self::$conexionBD);
-        $estudianteDAO->crear($estudiante);
+        $id_estudiante = $estudianteDAO->crear($estudiante);
+        return $id_estudiante;
     }
 
     /**

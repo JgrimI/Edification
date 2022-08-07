@@ -75,6 +75,7 @@ class EstudianteDAO implements DAO
 			$estudiante->setEstado($estado);
 		}
 		$stmt->close();
+		if (!isset($estudiante)) $estudiante = false;
 		return $estudiante;
 	}
 
@@ -137,8 +138,11 @@ class EstudianteDAO implements DAO
 		$stmt->bind_param("ssssss", $nombre, $apellido, $email, $dateC, $dateA, $estado);
 
 		$stmt->execute();
+
+		$id_estudiante = $stmt->insert_id;
 		// if ($stmt->affected_rows === 0) exit('No rows updated');
 		$stmt->close();
+		return $id_estudiante;
 	}
 
 	/**
