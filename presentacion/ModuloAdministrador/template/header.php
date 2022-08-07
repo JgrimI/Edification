@@ -36,7 +36,6 @@
 						<div class="hb-right">
 							<ul>
 								<li><a class="btn btn-light btn-round" href="./logout.php">Cerrar Sesión</a></li>
-								<!-- <li><a data-toggle="modal" data-target="#exampleModal2" class="btn btn-light btn-round" class="active" href="#">Sign Up</a></li> -->
 							</ul>
 						</div>
 					</div>
