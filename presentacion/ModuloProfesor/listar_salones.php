@@ -1,18 +1,14 @@
 <?php
 session_start();
-if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'admin') {
+if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'profesor') {
     header('Location: ../login.php');
 }
+
 require_once ($_SERVER["DOCUMENT_ROOT"]) . '/prueba/edification/persistencia/util/Conexion.php';
-require_once ($_SERVER["DOCUMENT_ROOT"]) . '/prueba/edification/negocio/ManejoProfesor.php';
 require_once ($_SERVER["DOCUMENT_ROOT"]) . '/prueba/edification/negocio/ManejoEstudiante.php';
 
 $obj = new Conexion();
 $conexion = $obj->conectarBD();
-
-ManejoProfesor::setConexionBD($conexion);
-
-$profesores = ManejoProfesor::listarProfesores();
 
 ManejoEstudiante::setConexionBD($conexion);
 
@@ -39,7 +35,7 @@ $estudiantes = ManejoEstudiante::listarEstudiantes();
 
     function verDetalleSalon(id) {
         id = btoa(id);
-        window.location.href = "administrador.php?menu=detalle-salon&id=" + id;
+        window.location.href = "profesor.php?menu=detalle-salon&id=" + id;
     }
 
     function registrarSalon() {
@@ -105,7 +101,8 @@ $estudiantes = ManejoEstudiante::listarEstudiantes();
             url: "ws/getSalones.php",
             data: {
                 id: id,
-                cambiar: 1
+                cambiar: 1,
+                profesor: <?php echo $_SESSION['id_user']; ?>,
             },
             success: function(data) {
                 //console.log(data);
@@ -221,7 +218,7 @@ $estudiantes = ManejoEstudiante::listarEstudiantes();
             type: "POST",
             url: "ws/getSalones.php",
             data: {
-
+                profesor: <?php echo $_SESSION['id_user']; ?>,
             },
             success: function(data) {
                 //console.log(data);
@@ -375,12 +372,10 @@ $estudiantes = ManejoEstudiante::listarEstudiantes();
                         <input type="text" name="descripcion" id="descripcion" class="form-control" placeholder="Ingresa la descripcion">
                     </div>
                     <div class="form-group">
-                        <label for="profesor">Elije un profesor:</label>
-                        <select name="profesor" class="form-control-select" id="profesor" class="form-control" required>
+                        <label for="profesor">Profesor:</label>
+                        <select name="profesor" class="form-control-select" id="profesor" class="form-control" required disabled>
                             <?php
-                            foreach ($profesores as $p) {
-                                echo '<option value="' . $p->getId() . '">' . $p->getNombre() . ' ' . $p->getApellido() . '</option>';
-                            }
+                            echo '<option value="' . $_SESSION['id_user'] . '"selected>' . $_SESSION['nom_user']  . ' ' . $_SESSION['ape_user']  . '</option>';
                             ?>
                         </select>
                     </div>

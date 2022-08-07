@@ -51,7 +51,7 @@ if (isset($_POST['id'])) {
         "success"
     ).then(function (result) {
         if (true) {
-        window.location = "administrador.php?menu=salones";
+        window.location = "profesor.php?menu=salones";
         }
     })
     </script>';
@@ -73,7 +73,7 @@ if (isset($_GET['id'])) {
     $profesoresAll = ManejoProfesor::listarProfesores();
     $estudiantes = $salon->getEstudiantes();
 } else {
-    header('Location: administrador.php?menu=salones');
+    header('Location: profesor.php?menu=salones');
 }
 ?>
 <script type="text/javascript">

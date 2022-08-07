@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'admin') {
+if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'profesor') {
     header('Location: ../login.php');
 }
 

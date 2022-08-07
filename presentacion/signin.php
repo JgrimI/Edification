@@ -33,8 +33,6 @@ if ($adminValidado !== false) {
 		if ($cambiarContra == 1) {
 			// header("location: /prueba/presentacion/cambiarContrasena.php");
 		} else {
-			var_dump($admin);
-			echo 'entrooo';
 			header("location: /prueba/edification/presentacion/administrador.php");
 		}
 	}
@@ -48,6 +46,7 @@ if ($profesorValidado !== false) {
 		$_SESSION['tipo_user'] = 'profesor';
 		$_SESSION['id_user'] = $profesor->getId();
 		$_SESSION['nom_user'] = $profesor->getNombre();
+		$_SESSION['ape_user'] = $profesor->getApellido();
 		$_SESSION['email_user'] = $correo;
 		if ($cambiarContra == 1) {
 			// header("location: /prueba/presentacion/cambiarContrasena.php");

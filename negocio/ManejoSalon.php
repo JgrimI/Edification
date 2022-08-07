@@ -101,6 +101,17 @@ class ManejoSalon
         return $salones;
     }
 
+    /**
+     * Lista todos los salones por profesor dado
+     * @param string codigo del profesor del salon
+     * @return Salon[] Lista de todos los salones de la base de datos
+     */
+    public  static function listarSalonesProfesor($id_profesor)
+    {
+        $salonDAO = SalonDAO::obtenersalonDAO(self::$conexionBD);
+        $salones = $salonDAO->listarTodoProfesor($id_profesor);
+        return $salones;
+    }
 
     /**
      * Modifica un salon

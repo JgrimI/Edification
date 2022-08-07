@@ -1,6 +1,9 @@
 <?php
 
-// session_start();
+session_start();
+if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'admin') {
+    header('Location: ../login.php');
+}
 
 // require_once('/persistencia/util/Conexion.php');
 

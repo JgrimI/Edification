@@ -20,12 +20,15 @@ if (isset($_POST['cambiar'])) {
     }
     ManejoSalon::modificarSalon($salon);
 }
-
-$salones = ManejoSalon::listarSalones();
-
+if (isset($_POST['profesor'])) {
+    $salones = ManejoSalon::listarSalonesProfesor($_POST['profesor']);
+} else {
+    $salones = ManejoSalon::listarSalones();
+}
 $json = [];
 $response = [];
 foreach ($salones as $s) {
+
     $profesor = ManejoProfesor::consultarProfesor($s->getIdProfesor());
 
     $estado =  ($s->getEstado() == 'A') ? 'Activo' : 'Inactivo';
