@@ -23,7 +23,7 @@ if (isset($_POST['id'])) {
         "success"
     ).then(function (result) {
         if (true) {
-          window.location = "administrador.php?menu=estudiantes";
+          window.location = "profesor.php?menu=estudiantes";
         }
       })
       </script>';
@@ -39,7 +39,7 @@ if (isset($_GET['id'])) {
 
     $estudiante = ManejoEstudiante::consultarEstudiante($id);
 } else {
-    header('Location: administrador.php?menu=estudiantes');
+    header('Location: profesor.php?menu=estudiantes');
 }
 ?>
 

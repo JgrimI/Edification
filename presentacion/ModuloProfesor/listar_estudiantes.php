@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'profesor') {
-    header('Location: ../login.php');
+    header('Location: index.php');
 }
 
 // require_once('/persistencia/util/Conexion.php');
@@ -24,7 +24,7 @@ if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'profesor') {
 
     function verDetalleEstudiante(id) {
         id = btoa(id);
-        window.location.href = "administrador.php?menu=detalle-estudiante&id=" + id;
+        window.location.href = "profesor.php?menu=detalle-estudiante&id=" + id;
     }
 
     function registrarEstudiante() {

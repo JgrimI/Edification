@@ -5,11 +5,6 @@ if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'profesor') {
     header('Location: ../login.php');
 }
 
-// require_once('/persistencia/util/Conexion.php');
-
-// $obj = new Conexion();
-// $conexion = $obj->conectarBD();
-
 ?>
 
 <style type="text/css">

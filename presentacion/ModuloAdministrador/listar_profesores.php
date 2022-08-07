@@ -2,7 +2,7 @@
 
 session_start();
 if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'admin') {
-    header('Location: ../login.php');
+    header('Location: index.php');
 }
 // require_once('/persistencia/util/Conexion.php');
 

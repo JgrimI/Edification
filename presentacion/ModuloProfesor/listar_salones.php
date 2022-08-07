@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['tipo_user']) || $_SESSION['tipo_user'] != 'profesor') {
-    header('Location: ../login.php');
+    header('Location: index.php');
 }
 
 require_once ($_SERVER["DOCUMENT_ROOT"]) . '/prueba/edification/persistencia/util/Conexion.php';
